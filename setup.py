@@ -8,7 +8,7 @@ from setuptools import find_packages
 
 
 setup(
-    name='xivo-stt',
+    name='wazo-stt',
     version='2.0',
     description='Wazo STT',
     author='Wazo Authors',
