@@ -33,7 +33,9 @@ class SttStasis:
             self._notifier.publish_stt(channel.id, result_stt)
 
     def get_text(self, channel_id):
-        ws = create_connection(self._config["stt"]["ari_websocket_stream"],
-                               header={"Channel-ID": channel_id})
+        ws = create_connection(
+            self._config["stt"]["ari_websocket_stream"],
+            header={"Channel-ID": channel_id, "Sec_WebSocket_Protocol": "stream-channel"}
+        )
         logger.critical("create done")
         return transcribe_streaming(ws, self._config["stt"]["google_creds"])
