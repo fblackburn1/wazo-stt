@@ -1,0 +1,27 @@
+# Copyright 2019-2019 The Wazo Authors  (see the AUTHORS file)
+# SPDX-License-Identifier: GPL-3.0+
+
+import logging
+
+from .notifier import SttNotifier
+from .bus_consume import SttBusEventHandler
+from .stasis import SttStasis
+
+logger = logging.getLogger(__name__)
+
+
+class Plugin:
+
+    def load(self, dependencies):
+        bus_consumer = dependencies['bus_consumer']
+        bus_publisher = dependencies['bus_publisher']
+        ari = dependencies['ari']
+
+        notifier = SttNotifier(bus_publisher)
+
+        stasis = SttStasis(ari, notifier)
+        stasis.initialize()
+
+        # bus_event_handler = SttBusEventHandler(notifier)
+        # bus_event_handler.subscribe(bus_consumer)
+
