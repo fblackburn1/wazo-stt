@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'xivo_ctid_ng.plugins': [
-            'stt = wazo_stt.ctid_ng.stt.plugin:Plugin',
+            'stt = wazo_stt.ctid_ng.plugin:Plugin',
         ]
     }
 )
