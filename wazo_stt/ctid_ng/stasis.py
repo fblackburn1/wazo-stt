@@ -80,8 +80,6 @@ class SttStasis:
         chunk = self._buffers.setdefault(channel.id, b'') + message
         self._buffers[channel.id] = chunk
 
-        logger.critical("_on_message: chunk len: %d", len(chunk))
-
         if len(chunk) < 1024 * 64:
             return
 
@@ -102,11 +100,13 @@ class SttStasis:
         responses = list(self._speech_client.streaming_recognize(
             self._streaming_config, [request]))
 
-        results = list(responses[0].results)
-        logger.critical("results: %d" % len(results))
-        for result in results:
-            if result.is_final:
-                result_stt = result.alternatives[0].transcript
-                logger.critical("test: %s", result_stt)
-                channel.setChannelVar(variable="X_WAZO_STT", value=result_stt)
-                self._notifier.publish_stt(channel.id, result_stt)
+        logger.critical("responses: %d" % len(responses))
+        for response in responses:
+            results = list(response.results)
+            logger.critical("results: %d" % len(results))
+            for result in results:
+                if result.is_final:
+                    result_stt = result.alternatives[0].transcript
+                    logger.critical("test: %s", result_stt)
+                    channel.setChannelVar(variable="X_WAZO_STT", value=result_stt)
+                    self._notifier.publish_stt(channel.id, result_stt)
